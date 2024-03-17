@@ -40,8 +40,7 @@ const ctx: Context = {
   outDir: resolve(fixtureDir, presetTmpDir, '.output'),
   env: {
     NITRO_HELLO: 'world',
-    CUSTOM_HELLO_THERE: 'general',
-    SECRET: 'secret'
+    NITRO_SECRET: 'secret'
   },
   fetch: (url, opts): Promise<Response> => $fetch(joinURL(ctx.server!.url, url.slice(1)), {
     redirect: 'manual',
