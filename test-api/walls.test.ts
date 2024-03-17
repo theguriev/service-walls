@@ -65,6 +65,20 @@ describe('Walls', () => {
         }
       })
     })
+    it('has one wall in it', async () => {
+      await await $fetch('/walls', {
+        baseURL: 'http://localhost:3000',
+        headers: {
+          Accept: 'application/json',
+          Cookie: `accessToken=${accessToken};`
+        },
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(200)
+          expect(response._data).toBeInstanceOf(Array)
+          expect(response._data).toHaveLength(1)
+        }
+      })
+    })
   })
 
   describe('PUT /walls/[id]', () => {
@@ -78,6 +92,21 @@ describe('Walls', () => {
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
           expect(response._data.name).toBe(newName)
+        }
+      })
+    })
+  })
+
+  describe('DELETE /walls/[id]', () => {
+    it('delete the wall', async () => {
+      await $fetch(`/walls/${postedWallId}`, {
+        baseURL: 'http://localhost:3000',
+        method: 'DELETE',
+        headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(200)
+          expect(response._data).toBeInstanceOf(Array)
+          expect(response._data).toHaveLength(0)
         }
       })
     })
