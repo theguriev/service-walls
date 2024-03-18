@@ -100,6 +100,30 @@ describe('sources', () => {
         }
       })
     })
+
+    it('invalid objectId', async () => {
+      await $fetch(`/sources/${wallId}/123123123`, {
+        baseURL: 'http://localhost:3000',
+        headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
+        ignoreResponseError: true,
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(409)
+          expect(response._data).toMatchObject({ message: 'Invalid id!' })
+        }
+      })
+    })
+
+    it('source not found', async () => {
+      await $fetch(`/sources/${wallId}/65f8534bbbb8fac4c9825c00`, {
+        baseURL: 'http://localhost:3000',
+        headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
+        ignoreResponseError: true,
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(409)
+          expect(response._data).toMatchObject({ message: 'Source not exists!' })
+        }
+      })
+    })
   })
 
   describe('PUT /sources/[wallId]/[id]', () => {

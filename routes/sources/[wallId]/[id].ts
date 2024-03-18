@@ -1,9 +1,12 @@
 export default eventHandler(async (event) => {
   const author = await getUserId(event)
   const wallId = getRouterParam(event, 'wallId')
-  const id = getRouterParam(event, 'id')
+  const _id = getRouterParam(event, 'id')
+  if (!isValidObjectId(_id)) {
+    throw createError({ message: 'Invalid id!', status: 409 })
+  }
   const exist = await ModelSources.findOne({
-    _id: id,
+    _id,
     author,
     wallId
   }).exec()

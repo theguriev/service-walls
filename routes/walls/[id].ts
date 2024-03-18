@@ -1,4 +1,3 @@
-import { isValidObjectId } from 'mongoose'
 export default eventHandler(async (event) => {
   const author = await getUserId(event)
   const _id = getRouterParam(event, 'id')
