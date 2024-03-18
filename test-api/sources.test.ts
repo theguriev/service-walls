@@ -89,6 +89,19 @@ describe('sources', () => {
     })
   })
 
+  describe('GET /sources/[wallId]/[id]', () => {
+    it('get source by id', async () => {
+      await $fetch(`/sources/${wallId}/${postedId}`, {
+        baseURL: 'http://localhost:3000',
+        headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(200)
+          expect(response._data).toMatchObject({ name: 'Some name', type: 'instagram', author: '123', wallId })
+        }
+      })
+    })
+  })
+
   describe('PUT /sources/[wallId]/[id]', () => {
     it('changes the source name and type', async () => {
       const newName = 'New Name of wall'

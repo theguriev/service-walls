@@ -81,6 +81,19 @@ describe('Walls', () => {
     })
   })
 
+  describe('GET /walls/[id]', () => {
+    it('get wall by id', async () => {
+      await $fetch(`/walls/${postedWallId}`, {
+        baseURL: 'http://localhost:3000',
+        headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
+        onResponse: ({ response }) => {
+          expect(response.status).toBe(200)
+          expect(response._data).toMatchObject({ name: 'Some wall name', author: '123' })
+        }
+      })
+    })
+  })
+
   describe('PUT /walls/[id]', () => {
     it('changes the wall name', async () => {
       const newName = 'New Name of wall'
