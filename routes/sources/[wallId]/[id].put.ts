@@ -11,11 +11,11 @@ export default eventHandler(async (event) => {
     name,
     type
   } = await zodValidateBody(event, requestBodySchema.parse)
-  const exist = ModelSources.findOne({
+  const exist = await ModelSources.findOne({
     _id: id,
     author,
     wallId
-  })
+  }).exec()
 
   if (exist === null) {
     throw createError({ message: 'Source not exists!', status: 409 })
@@ -35,6 +35,6 @@ export default eventHandler(async (event) => {
 
   const updated = await ModelSources.findOne({
     _id: id
-  })
+  }).exec()
   return updated?.toJSON()
 })
