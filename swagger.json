@@ -175,6 +175,58 @@
             "description": "Not Found"
           }
         }
+      },
+      "get": {
+        "summary": "Get source item by ID",
+        "description": "Get a specific source item within the specified wall",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wallId",
+            "required": true,
+            "description": "The ID of the wall containing the source item",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ID of the source item to be updated",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceItemUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/routes/walls/{id}": {
@@ -277,10 +329,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Wall"
-                  }
+                  "$ref": "#/components/schemas/Wall"
                 }
               }
             }
