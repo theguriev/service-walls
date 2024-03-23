@@ -480,7 +480,7 @@
       "Wall": {
         "type": "object",
         "properties": {
-          "id": {
+          "_id": {
             "type": "string",
             "description": "The unique identifier of the wall"
           },
