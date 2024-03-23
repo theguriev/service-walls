@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/routes/sources/{wallId}": {
+    "/sources/{wallId}": {
       "post": {
         "summary": "Create a new source item",
         "description": "Creates a new source item within the specified wall",
@@ -78,7 +78,7 @@
         }
       }
     },
-    "/routes/sources/{wallId}/{id}": {
+    "/sources/{wallId}/{id}": {
       "delete": {
         "summary": "Delete a source item",
         "description": "Deletes a specific source item from the specified wall",
@@ -229,7 +229,7 @@
         }
       }
     },
-    "/routes/walls/{id}": {
+    "/walls/{id}": {
       "put": {
         "summary": "Update a wall",
         "description": "Updates a specific wall",
@@ -340,7 +340,7 @@
         }
       }
     },
-    "/routes/walls": {
+    "/walls": {
       "post": {
         "summary": "Create a new wall",
         "description": "Creates a new wall",
