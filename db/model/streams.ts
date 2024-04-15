@@ -1,5 +1,5 @@
 import { model } from 'mongoose'
 
-const Model = model('Sources', schemaSource)
+const Model = model('Streams', schemaStream)
 
 export default Model

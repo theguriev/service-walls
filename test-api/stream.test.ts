@@ -1,14 +1,13 @@
 import issueAccessToken from '@/utils/issueAccessToken'
 
-describe('sources', () => {
+describe('Walls', () => {
   const secret = String(process.env.NITRO_SECRET)
   const accessToken = issueAccessToken({ userId: '123', email: 'test@test.com', name: 'some name' }, { secret })
-  let postedId: string
-  const wallId = '123'
+  let postedWallId: string
 
-  describe('GET /sources/[wallId]', () => {
-    it('gets 200 items array', async () => {
-      await $fetch(`/sources/${wallId}`, {
+  describe('GET /', () => {
+    it('gets 200 streams array', async () => {
+      await $fetch('/', {
         baseURL: 'http://localhost:3000',
         headers: {
           Accept: 'application/json',
@@ -22,18 +21,30 @@ describe('sources', () => {
     })
   })
 
-  describe('POST /sources', () => {
+  describe('POST /', () => {
     it('gets 400 on validation errors', async () => {
-      await $fetch(`/sources/${wallId}`, {
+      await $fetch('/', {
         baseURL: 'http://localhost:3000',
         method: 'POST',
         ignoreResponseError: true,
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
-        body: { name: '1', type: 'no type' },
+        body: {
+          name: '1',
+          sources: [{
+            type: 'x',
+            access: {
+              token_type: 'bearer',
+              expires_in: 7200,
+              access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
+              scope: 'users.read follows.read tweet.read offline.access',
+              refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+            }
+          }]
+        },
         onResponse: ({ response }) => {
           expect(response.status).toBe(400)
           expect(response._data).toMatchObject({
-            url: `/sources/${wallId}`,
+            url: '/',
             statusCode: 400,
             statusMessage: 'Validation Error',
             message: 'Validation Error',
@@ -46,13 +57,6 @@ describe('sources', () => {
                 exact: false,
                 message: 'String must contain at least 3 character(s)',
                 path: ['name']
-              },
-              {
-                code: 'invalid_enum_value',
-                message: "Invalid enum value. Expected 'instagram' | 'facebook' | 'x', received 'no type'",
-                options: ['instagram', 'facebook', 'x'],
-                path: ['type'],
-                received: 'no type'
               }
             ]
           })
@@ -60,21 +64,33 @@ describe('sources', () => {
       })
     })
     it('gets 200 on success creation', async () => {
-      await $fetch(`/sources/${wallId}`, {
+      await $fetch('/', {
         baseURL: 'http://localhost:3000',
         method: 'POST',
         ignoreResponseError: true,
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
-        body: { name: 'Some name', type: 'instagram' },
+        body: {
+          name: 'Some stream name',
+          sources: [{
+            type: 'x',
+            access: {
+              token_type: 'bearer',
+              expires_in: 7200,
+              access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
+              scope: 'users.read follows.read tweet.read offline.access',
+              refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+            }
+          }]
+        },
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
-          expect(response._data).toMatchObject({ name: 'Some name' })
-          postedId = response._data._id
+          expect(response._data).toMatchObject({ name: 'Some stream name' })
+          postedWallId = response._data._id
         }
       })
     })
-    it('has one wall in it', async () => {
-      await await $fetch(`/sources/${wallId}`, {
+    it('has one stream in it', async () => {
+      await await $fetch('/', {
         baseURL: 'http://localhost:3000',
         headers: {
           Accept: 'application/json',
@@ -89,20 +105,20 @@ describe('sources', () => {
     })
   })
 
-  describe('GET /sources/[wallId]/[id]', () => {
-    it('get source by id', async () => {
-      await $fetch(`/sources/${wallId}/${postedId}`, {
+  describe('GET /[id]', () => {
+    it('get stream by id', async () => {
+      await $fetch(`/${postedWallId}`, {
         baseURL: 'http://localhost:3000',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
-          expect(response._data).toMatchObject({ name: 'Some name', type: 'instagram', author: '123', wallId })
+          expect(response._data).toMatchObject({ name: 'Some stream name', author: '123' })
         }
       })
     })
 
     it('invalid objectId', async () => {
-      await $fetch(`/sources/${wallId}/123123123`, {
+      await $fetch('/123123123', {
         baseURL: 'http://localhost:3000',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
         ignoreResponseError: true,
@@ -113,40 +129,38 @@ describe('sources', () => {
       })
     })
 
-    it('source not found', async () => {
-      await $fetch(`/sources/${wallId}/65f8534bbbb8fac4c9825c00`, {
+    it('stream not found', async () => {
+      await $fetch('/65f8534bbbb8fac4c9825c00', {
         baseURL: 'http://localhost:3000',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
         ignoreResponseError: true,
         onResponse: ({ response }) => {
           expect(response.status).toBe(409)
-          expect(response._data).toMatchObject({ message: 'Source not exists!' })
+          expect(response._data).toMatchObject({ message: 'Stream not exists!' })
         }
       })
     })
   })
 
-  describe('PUT /sources/[wallId]/[id]', () => {
-    it('changes the source name and type', async () => {
-      const newName = 'New Name of wall'
-      const newType = 'x'
-      await $fetch(`/sources/${wallId}/${postedId}`, {
+  describe('PUT /[id]', () => {
+    it('changes the stream name', async () => {
+      const newName = 'New Name of stream'
+      await $fetch(`/${postedWallId}`, {
         baseURL: 'http://localhost:3000',
         method: 'PUT',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
-        body: { name: newName, type: newType },
+        body: { name: newName },
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
           expect(response._data.name).toBe(newName)
-          expect(response._data.type).toBe(newType)
         }
       })
     })
   })
 
-  describe('DELETE /sources/[id]', () => {
-    it('delete the source', async () => {
-      await $fetch(`/sources/${wallId}/${postedId}`, {
+  describe('DELETE /[id]', () => {
+    it('delete the stream', async () => {
+      await $fetch(`/${postedWallId}`, {
         baseURL: 'http://localhost:3000',
         method: 'DELETE',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },

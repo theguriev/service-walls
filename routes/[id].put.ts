@@ -8,16 +8,16 @@ export default eventHandler(async (event) => {
   const {
     name
   } = await zodValidateBody(event, requestBodySchema.parse)
-  const wallExist = ModelWalls.findOne({
+  const exist = ModelStreams.findOne({
     _id: id,
     author
   })
 
-  if (wallExist === null) {
-    throw createError({ message: 'Wall not exists!', status: 409 })
+  if (exist === null) {
+    throw createError({ message: 'Stream not exists!', status: 409 })
   }
 
-  await ModelWalls.updateOne(
+  await ModelStreams.updateOne(
     {
       _id: id
     },
@@ -28,7 +28,7 @@ export default eventHandler(async (event) => {
     }
   )
 
-  const updatedWall = await ModelWalls.findOne({
+  const updatedWall = await ModelStreams.findOne({
     _id: id
   })
   return updatedWall?.toJSON()

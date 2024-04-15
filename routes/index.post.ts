@@ -1,16 +1,19 @@
 const requestBodySchema = z.object({
   name: z.string().min(3).max(50),
-  type: z.enum(['instagram', 'facebook', 'x'])
+  sources: z.array(z.object({
+    type: z.enum(['instagram', 'facebook', 'x', 'youtube']),
+    access: z.object({}).optional(),
+    options: z.object({}).optional()
+  }))
 })
 
 export default eventHandler(async (event) => {
   const {
     name,
-    type
+    sources
   } = await zodValidateBody(event, requestBodySchema.parse)
-  const wallId = getRouterParam(event, 'wallId')
   const author = await getUserId(event)
-  const doc = new ModelSources({ name, timestamp: Date.now(), author, wallId, type })
+  const doc = new ModelStreams({ name, timestamp: Date.now(), author, sources })
   const saved = await doc.save()
   return saved.toJSON()
 })
