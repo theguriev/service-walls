@@ -226,11 +226,14 @@
             }
           }
         },
-        "required": ["name", "timestamp", "author", "sources"]
+        "required": ["_id", "name", "timestamp", "author", "sources"]
       },
       "Source": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string"
+          },
           "type": {
             "type": "string",
             "enum": ["instagram", "facebook", "x", "youtube"]
@@ -242,7 +245,7 @@
             "type": "object"
           }
         },
-        "required": ["type", "access"]
+        "required": ["_id", "type", "access"]
       }
     }
   }

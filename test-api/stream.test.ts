@@ -72,6 +72,7 @@ describe('Walls', () => {
         body: {
           name: 'Some stream name',
           sources: [{
+            _id: '123',
             type: 'x',
             access: {
               token_type: 'bearer',
