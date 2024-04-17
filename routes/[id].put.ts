@@ -12,7 +12,8 @@ export default eventHandler(async (event) => {
   const author = await getUserId(event)
   const id = getRouterParam(event, 'id')
   const {
-    name
+    name,
+    sources
   } = await zodValidateBody(event, requestBodySchema.parse)
   const exist = ModelStreams.findOne({
     _id: id,
@@ -29,7 +30,8 @@ export default eventHandler(async (event) => {
     },
     {
       $set: {
-        name
+        name,
+        sources
       }
     }
   )
