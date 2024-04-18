@@ -245,7 +245,7 @@
             "type": "object"
           }
         },
-        "required": ["_id", "type", "meta"]
+        "required": ["_id", "type"]
       }
     }
   }
