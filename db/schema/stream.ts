@@ -11,7 +11,7 @@ const streamSchema = new Schema({
         type: String,
         enum: ['instagram', 'facebook', 'x', 'youtube']
       },
-      access: Object,
+      meta: Object,
       options: Object
     }]
 })
