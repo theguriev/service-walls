@@ -3,8 +3,8 @@ const requestBodySchema = z.object({
   sources: z.array(z.object({
     _id: z.string(),
     type: z.enum(['instagram', 'facebook', 'x', 'youtube']),
-    access: z.object({}).optional(),
-    options: z.object({}).optional()
+    meta: z.object({}).passthrough().optional(),
+    options: z.object({}).passthrough().optional()
   }))
 })
 

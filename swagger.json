@@ -238,14 +238,14 @@
             "type": "string",
             "enum": ["instagram", "facebook", "x", "youtube"]
           },
-          "access": {
+          "meta": {
             "type": "object"
           },
           "options": {
             "type": "object"
           }
         },
-        "required": ["_id", "type", "access"]
+        "required": ["_id", "type", "meta"]
       }
     }
   }

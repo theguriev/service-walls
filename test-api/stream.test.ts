@@ -31,13 +31,16 @@ describe('Walls', () => {
         body: {
           name: '1',
           sources: [{
+            _id: '123',
             type: 'x',
-            access: {
-              token_type: 'bearer',
-              expires_in: 7200,
-              access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
-              scope: 'users.read follows.read tweet.read offline.access',
-              refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+            meta: {
+              access: {
+                token_type: 'bearer',
+                expires_in: 7200,
+                access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
+                scope: 'users.read follows.read tweet.read offline.access',
+                refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+              }
             }
           }]
         },
@@ -71,17 +74,7 @@ describe('Walls', () => {
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
         body: {
           name: 'Some stream name',
-          sources: [{
-            _id: '123',
-            type: 'x',
-            access: {
-              token_type: 'bearer',
-              expires_in: 7200,
-              access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
-              scope: 'users.read follows.read tweet.read offline.access',
-              refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
-            }
-          }]
+          sources: []
         },
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
@@ -150,10 +143,39 @@ describe('Walls', () => {
         baseURL: 'http://localhost:3000',
         method: 'PUT',
         headers: { Accept: 'application/json', Cookie: `accessToken=${accessToken};` },
-        body: { name: newName },
+        body: {
+          name: newName,
+          sources: [{
+            _id: '321',
+            type: 'x',
+            meta: {
+              access: {
+                token_type: 'bearer',
+                expires_in: 7200,
+                access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
+                scope: 'users.read follows.read tweet.read offline.access',
+                refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+              }
+            }
+          }]
+        },
         onResponse: ({ response }) => {
           expect(response.status).toBe(200)
           expect(response._data.name).toBe(newName)
+          console.log('log: 🚀', response._data.sources)
+          expect(response._data.sources?.[0]).toMatchObject({
+            _id: '321',
+            type: 'x',
+            meta: {
+              access: {
+                token_type: 'bearer',
+                expires_in: 7200,
+                access_token: 'M0JIMnhKSU1pTmdnYVJYT0dmWThqR1lnWi1lWEhZQ25WN0dDM0lFMG5PdnQyOjE3MTI5MDU2NDUwNTI6MTowOmF0OjE',
+                scope: 'users.read follows.read tweet.read offline.access',
+                refresh_token: 'S2FGcjJIYlpVd0J1YnhzcC11TlVjYjNxUi1vR3BGM3RPUTF0ajVnSGpQcXRWOjE3MTI5MDU2NDUwNTI6MToxOnJ0OjE'
+              }
+            }
+          })
         }
       })
     })

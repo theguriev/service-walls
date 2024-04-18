@@ -6,7 +6,7 @@ const streamSchema = new Schema({
   author: String,
   sources: [
     {
-        _id: String,
+      _id: String,
       type: {
         type: String,
         enum: ['instagram', 'facebook', 'x', 'youtube']
